@@ -45,6 +45,7 @@ public class RedCable extends JavaPlugin {
 		
 		ResourceManager.resetCache();
 		
+		Bukkit.getLogger().log(Level.INFO, "[RedCable] Enabled");
 		
 	}
 	
