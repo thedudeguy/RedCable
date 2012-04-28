@@ -14,7 +14,7 @@ public class Recipies {
 		// Speaker Wire //
 		//////////////////
 		SpoutManager.getMaterialManager().registerSpoutRecipe(
-		new SpoutShapedRecipe( new SpoutItemStack(Items.speakerWire, 3) )
+		new SpoutShapedRecipe( new SpoutItemStack(Items.redCable, 3) )
 			.shape("sss", "rrr", "sss")
 			.setIngredient('s', MaterialData.whiteWool)
 			.setIngredient('r', MaterialData.redstone)

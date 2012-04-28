@@ -4,7 +4,7 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.ccdd.redcable.listeners.SpeakerWireListener;
+import org.ccdd.redcable.listeners.RedCableListener;
 import org.ccdd.redcable.materials.blocks.Blocks;
 import org.ccdd.redcable.materials.items.Items;
 import org.ccdd.redcable.util.Recipies;
@@ -39,7 +39,7 @@ public class RedCable extends JavaPlugin {
 		
 		Recipies.load();
 		
-		this.getServer().getPluginManager().registerEvents(new SpeakerWireListener(), this);
+		this.getServer().getPluginManager().registerEvents(new RedCableListener(), this);
 		
 		//this.getCommand("redcable").setExecutor(new CommandHandler());
 		

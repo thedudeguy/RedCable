@@ -8,13 +8,13 @@ import java.util.Map.Entry;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.ccdd.redcable.events.SpeakerWirePlaceEvent;
+import org.ccdd.redcable.events.RedCablePlaceEvent;
 import org.ccdd.redcable.materials.blocks.Blocks;
-import org.ccdd.redcable.materials.blocks.SpeakerWireBlock;
+import org.ccdd.redcable.materials.blocks.RedCableBlock;
 import org.ccdd.redcable.util.Debug;
 import org.getspout.spoutapi.block.SpoutBlock;
 
-public class SpeakerWireListener implements Listener {
+public class RedCableListener implements Listener {
 	
 	public HashMap<BlockFace, SpoutBlock> getAvailableWires(SpoutBlock block) {
 		List<BlockFace> faceList = Arrays.asList(BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST,  BlockFace.UP, BlockFace.DOWN);
@@ -26,10 +26,10 @@ public class SpeakerWireListener implements Listener {
 			
 			SpoutBlock relBlock = (SpoutBlock)block.getRelative(face);
 			
-			if (relBlock.getCustomBlock() != null && relBlock.getCustomBlock() instanceof SpeakerWireBlock) {
+			if (relBlock.getCustomBlock() != null && relBlock.getCustomBlock() instanceof RedCableBlock) {
 				Debug.debug("Block at ", face, " is speakerwireblock");
 				
-				if ( ((SpeakerWireBlock)relBlock.getCustomBlock()).hasOpenEnd(relBlock) )
+				if ( ((RedCableBlock)relBlock.getCustomBlock()).hasOpenEnd(relBlock) )
 				{
 					//if there is a maximum of 2, we dont need anymore, so go ahead and skip
 					if (wires.size() < 2) {
@@ -53,7 +53,7 @@ public class SpeakerWireListener implements Listener {
 			
 			if (!face.equals(ignoreFace)) {
 				
-				if ( ((SpeakerWireBlock)block.getCustomBlock()).isFaceConnected(block, face) ) return face;
+				if ( ((RedCableBlock)block.getCustomBlock()).isFaceConnected(block, face) ) return face;
 				
 			}
 		}
@@ -74,66 +74,66 @@ public class SpeakerWireListener implements Listener {
 					availableWires.containsKey(BlockFace.EAST) ||
 					availableWires.containsKey(BlockFace.WEST)
 					) {
-				wireBlock.setCustomBlock(Blocks.speakerWireBlockEastWest);
+				wireBlock.setCustomBlock(Blocks.redCableBlockEastWest);
 			} else if (
 					availableWires.containsKey(BlockFace.NORTH) ||
 					availableWires.containsKey(BlockFace.SOUTH)
 					) {
-				wireBlock.setCustomBlock(Blocks.speakerWireBlockNorthSouth);
+				wireBlock.setCustomBlock(Blocks.redCableBlockNorthSouth);
 			}
 			else if (
 					availableWires.containsKey(BlockFace.UP) ||
 					availableWires.containsKey(BlockFace.DOWN)
 					) {
-				wireBlock.setCustomBlock(Blocks.speakerWireBlockUpDown);
+				wireBlock.setCustomBlock(Blocks.redCableBlockUpDown);
 			}
 			break;
 		case 2:
 			//connecting to 2 wires
 			if (availableWires.containsKey(BlockFace.EAST) && availableWires.containsKey(BlockFace.WEST)) {
-				wireBlock.setCustomBlock(Blocks.speakerWireBlockEastWest);
+				wireBlock.setCustomBlock(Blocks.redCableBlockEastWest);
 				
 			} else if (availableWires.containsKey(BlockFace.NORTH) && availableWires.containsKey(BlockFace.SOUTH)) {
-				wireBlock.setCustomBlock(Blocks.speakerWireBlockNorthSouth);
+				wireBlock.setCustomBlock(Blocks.redCableBlockNorthSouth);
 				
 			} else if (availableWires.containsKey(BlockFace.NORTH) && availableWires.containsKey(BlockFace.EAST)) {
-				wireBlock.setCustomBlock(Blocks.speakerWireBlockNorthEast);
+				wireBlock.setCustomBlock(Blocks.redCableBlockNorthEast);
 				
 			} else if (availableWires.containsKey(BlockFace.EAST) && availableWires.containsKey(BlockFace.SOUTH)) {
-				wireBlock.setCustomBlock(Blocks.speakerWireBlockEastSouth);
+				wireBlock.setCustomBlock(Blocks.redCableBlockEastSouth);
 				
 			} else if (availableWires.containsKey(BlockFace.SOUTH) && availableWires.containsKey(BlockFace.WEST)) {
-				wireBlock.setCustomBlock(Blocks.speakerWireBlockSouthWest);
+				wireBlock.setCustomBlock(Blocks.redCableBlockSouthWest);
 				
 			} else if (availableWires.containsKey(BlockFace.WEST) && availableWires.containsKey(BlockFace.NORTH)) {
-				wireBlock.setCustomBlock(Blocks.speakerWireBlockWestNorth);
+				wireBlock.setCustomBlock(Blocks.redCableBlockWestNorth);
 				
 			} else if (availableWires.containsKey(BlockFace.UP) && availableWires.containsKey(BlockFace.DOWN)) {
-				wireBlock.setCustomBlock(Blocks.speakerWireBlockUpDown);
+				wireBlock.setCustomBlock(Blocks.redCableBlockUpDown);
 				
 			} else if (availableWires.containsKey(BlockFace.EAST) && availableWires.containsKey(BlockFace.UP)) {
-				wireBlock.setCustomBlock(Blocks.speakerWireBlockEastUp);
+				wireBlock.setCustomBlock(Blocks.redCableBlockEastUp);
 				
 			} else if (availableWires.containsKey(BlockFace.WEST) && availableWires.containsKey(BlockFace.UP)) {
-				wireBlock.setCustomBlock(Blocks.speakerWireBlockWestUp);
+				wireBlock.setCustomBlock(Blocks.redCableBlockWestUp);
 				
 			} else if (availableWires.containsKey(BlockFace.NORTH) && availableWires.containsKey(BlockFace.UP)) {
-				wireBlock.setCustomBlock(Blocks.speakerWireBlockNorthUp);
+				wireBlock.setCustomBlock(Blocks.redCableBlockNorthUp);
 				
 			} else if (availableWires.containsKey(BlockFace.SOUTH) && availableWires.containsKey(BlockFace.UP)) {
-				wireBlock.setCustomBlock(Blocks.speakerWireBlockSouthUp);
+				wireBlock.setCustomBlock(Blocks.redCableBlockSouthUp);
 				
 			} else if (availableWires.containsKey(BlockFace.EAST) && availableWires.containsKey(BlockFace.DOWN)) {
-				wireBlock.setCustomBlock(Blocks.speakerWireBlockEastDown);
+				wireBlock.setCustomBlock(Blocks.redCableBlockEastDown);
 				
 			} else if (availableWires.containsKey(BlockFace.WEST) && availableWires.containsKey(BlockFace.DOWN)) {
-				wireBlock.setCustomBlock(Blocks.speakerWireBlockWestDown);
+				wireBlock.setCustomBlock(Blocks.redCableBlockWestDown);
 				
 			} else if (availableWires.containsKey(BlockFace.NORTH) && availableWires.containsKey(BlockFace.DOWN)) {
-				wireBlock.setCustomBlock(Blocks.speakerWireBlockNorthDown);
+				wireBlock.setCustomBlock(Blocks.redCableBlockNorthDown);
 				
 			} else if (availableWires.containsKey(BlockFace.SOUTH) && availableWires.containsKey(BlockFace.DOWN)) {
-				wireBlock.setCustomBlock(Blocks.speakerWireBlockSouthDown);
+				wireBlock.setCustomBlock(Blocks.redCableBlockSouthDown);
 				
 			}
 			break;
@@ -142,7 +142,7 @@ public class SpeakerWireListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onPlace(SpeakerWirePlaceEvent event) {
+	public void onPlace(RedCablePlaceEvent event) {
 		Debug.debug(event.getPlayer(), "Placing Speaker Wire");
 		
 		HashMap<BlockFace, SpoutBlock> wires = getAvailableWires(event.getBlock());
@@ -151,7 +151,7 @@ public class SpeakerWireListener implements Listener {
 		Debug.debug(event.getPlayer(), "Placing Wire");
 		
 		
-		event.getBlock().setCustomBlock(Blocks.speakerWireBlockEastWest);
+		event.getBlock().setCustomBlock(Blocks.redCableBlockEastWest);
 		
 		setBlockType((SpoutBlock)event.getBlock(), wires);
 		

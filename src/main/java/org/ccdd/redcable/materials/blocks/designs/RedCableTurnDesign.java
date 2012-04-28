@@ -5,13 +5,13 @@ import org.ccdd.redcable.materials.blocks.Blocks;
 import org.getspout.spoutapi.block.design.GenericBlockDesign;
 import org.getspout.spoutapi.block.design.SubTexture;
 
-public class SpeakerWireTurnDesign extends GenericBlockDesign {
+public class RedCableTurnDesign extends GenericBlockDesign {
 	
-	public SpeakerWireTurnDesign(int degreesY) {
+	public RedCableTurnDesign(int degreesY) {
 		this(0, degreesY, 0, 0, 0, 0);
 	}
 	
-	public SpeakerWireTurnDesign(int degreesX, int degreesY, int degreesZ, float moveX, float moveY, float moveZ) {
+	public RedCableTurnDesign(int degreesX, int degreesY, int degreesZ, float moveX, float moveY, float moveZ) {
 		
 		setTexture(RedCable.instance, Blocks.speakerwireTexture);
 		setMinBrightness(0F);

@@ -5,9 +5,9 @@ import org.ccdd.redcable.materials.blocks.Blocks;
 import org.getspout.spoutapi.block.design.GenericBlockDesign;
 import org.getspout.spoutapi.block.design.SubTexture;
 
-public class SpeakerWireStraightDesign extends GenericBlockDesign {
+public class RedCableStraightDesign extends GenericBlockDesign {
 
-	public SpeakerWireStraightDesign(int degreesY) {
+	public RedCableStraightDesign(int degreesY) {
 		this(0, degreesY, 0, 0, 0, 0);
 	}
 	
@@ -16,7 +16,7 @@ public class SpeakerWireStraightDesign extends GenericBlockDesign {
 	 * @param degreesY the amount to rotate the entire design on the y axis
 	 * @param degreesX the amount to rotate the entire design on the x axis
 	 */
-	public SpeakerWireStraightDesign(int degreesX, int degreesY, int degreesZ, float moveX, float moveY, float moveZ) {
+	public RedCableStraightDesign(int degreesX, int degreesY, int degreesZ, float moveX, float moveY, float moveZ) {
 
 		setTexture(RedCable.instance, Blocks.speakerwireTexture);
 		setMinBrightness(0F);

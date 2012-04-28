@@ -1,11 +1,11 @@
 package org.ccdd.redcable.materials.blocks.wires;
 
 import org.bukkit.block.BlockFace;
-import org.ccdd.redcable.materials.blocks.SpeakerWireBlock;
-import org.ccdd.redcable.materials.blocks.designs.SpeakerWireStraightDesign;
+import org.ccdd.redcable.materials.blocks.RedCableBlock;
+import org.ccdd.redcable.materials.blocks.designs.RedCableStraightDesign;
 import org.getspout.spoutapi.block.SpoutBlock;
 
-public class SpeakerWireUpDown extends SpeakerWireBlock {
+public class RedCableUpDown extends RedCableBlock {
 
 	private int rotationX = 0;
 	private int rotationY = 0;
@@ -15,10 +15,10 @@ public class SpeakerWireUpDown extends SpeakerWireBlock {
 	private float moveY = -0.46875F;
 	private float moveZ = 0;
 	
-	public SpeakerWireUpDown() {
-		super(SpeakerWireBlock.UPtoDOWN, 85);
+	public RedCableUpDown() {
+		super(RedCableBlock.UPtoDOWN, 85);
 		
-		this.setBlockDesign(new SpeakerWireStraightDesign(rotationX, rotationY, rotationZ, moveX, moveY, moveZ));
+		this.setBlockDesign(new RedCableStraightDesign(rotationX, rotationY, rotationZ, moveX, moveY, moveZ));
 		
 	}
 

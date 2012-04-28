@@ -5,16 +5,16 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
 import org.ccdd.redcable.RedCable;
-import org.ccdd.redcable.events.SpeakerWirePlaceEvent;
+import org.ccdd.redcable.events.RedCablePlaceEvent;
 import org.ccdd.redcable.util.Debug;
 import org.getspout.spoutapi.block.SpoutBlock;
 import org.getspout.spoutapi.material.item.GenericCustomItem;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
-public class SpeakerWire extends GenericCustomItem {
+public class RedCableItem extends GenericCustomItem {
 	
-	public SpeakerWire() {
-		super(RedCable.instance, "Speaker Wire");
+	public RedCableItem() {
+		super(org.ccdd.redcable.RedCable.instance, "Speaker Wire");
 		this.setTexture("speakerwire.png");
 	}
 	
@@ -26,7 +26,7 @@ public class SpeakerWire extends GenericCustomItem {
 			SpoutBlock placeBlock = block.getRelative(face);
 			if (placeBlock == null || placeBlock.getType().equals(Material.AIR)) {
 				
-				SpeakerWirePlaceEvent event = new SpeakerWirePlaceEvent(player, placeBlock);
+				RedCablePlaceEvent event = new RedCablePlaceEvent(player, placeBlock);
 				Bukkit.getServer().getPluginManager().callEvent(event);
 				
 				//remove 1 from hand.

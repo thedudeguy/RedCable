@@ -3,11 +3,11 @@ package org.ccdd.redcable.materials.items;
 
 public class Items {
 
-	public static SpeakerWire speakerWire;
+	public static RedCableItem redCable;
 	
 	public Items() {
 		
-		speakerWire = new SpeakerWire();
+		redCable = new RedCableItem();
 		
 	}
 }

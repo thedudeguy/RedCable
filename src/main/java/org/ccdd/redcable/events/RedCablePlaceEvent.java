@@ -6,11 +6,11 @@ import org.bukkit.event.HandlerList;
 import org.getspout.spoutapi.block.SpoutBlock;
 
 /**
- * A custom event for when SpeakerWire is placed into the world
+ * A custom event for when RedCable is placed into the world
  * @author Chris
  *
  */
-public class SpeakerWirePlaceEvent extends Event {
+public class RedCablePlaceEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
 	
@@ -21,7 +21,7 @@ public class SpeakerWirePlaceEvent extends Event {
 	 * @param player the player who placed the speakerwire
 	 * @param block where the player is attempting to place the wire
 	 */
-	public SpeakerWirePlaceEvent(Player player, SpoutBlock block) {
+	public RedCablePlaceEvent(Player player, SpoutBlock block) {
 		this.block = block;
 		this.player = player;
 	}
