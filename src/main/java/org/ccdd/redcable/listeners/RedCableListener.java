@@ -13,7 +13,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.ccdd.redcable.RedCable;
+
+import org.bukkit.event.block.BlockRedstoneEvent;
 import org.ccdd.redcable.events.RedCablePlaceEvent;
+import org.ccdd.redcable.events.RedCablePowerEvent;
 import org.ccdd.redcable.materials.blocks.Blocks;
 import org.ccdd.redcable.materials.blocks.RedCableBlock;
 import org.ccdd.redcable.util.Debug;
@@ -144,6 +147,27 @@ public class RedCableListener implements Listener {
 			break;
 		}
 		
+	}
+	
+	@EventHandler 
+	public void onRedstone(BlockRedstoneEvent event) {
+		
+		SpoutBlock block = (SpoutBlock)event.getBlock();
+		
+		Debug.debug("BlockRedstoneEvent || Name: ", block.getBlockType().getName() , "|| Old current: ", event.getOldCurrent(), " || New Current: ", event.getNewCurrent());
+		
+	}
+	
+	@EventHandler
+	public void onRedCablePower(RedCablePowerEvent event) {
+		
+		RedCableBlock cableBlock = (RedCableBlock)event.getBlock().getCustomBlock();
+		
+		Debug.debug("RedCablePowerEvent || oldCurrent: ", event.getOldCurrent(), " || newCurrent: ", event.getNewCurrent(), " || faceComingFrom: ", event.getFaceComingFrom());
+		
+		//set this blocks power to 1.
+		cableBlock.setPower(event.getBlock(), event.getNewCurrent());
+	
 	}
 	
 	@EventHandler

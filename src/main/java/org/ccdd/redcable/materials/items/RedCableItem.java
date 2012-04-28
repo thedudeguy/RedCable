@@ -5,7 +5,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
-import org.ccdd.redcable.RedCable;
 import org.ccdd.redcable.events.RedCablePlaceEvent;
 import org.ccdd.redcable.util.Debug;
 import org.getspout.spoutapi.block.SpoutBlock;
@@ -15,7 +14,7 @@ import org.getspout.spoutapi.player.SpoutPlayer;
 public class RedCableItem extends GenericCustomItem {
 	
 	public RedCableItem() {
-		super(org.ccdd.redcable.RedCable.instance, "Speaker Wire");
+		super(org.ccdd.redcable.RedCable.instance, "RedStone Cable");
 		this.setTexture("speakerwire.png");
 	}
 	
