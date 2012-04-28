@@ -1,5 +1,6 @@
 package org.ccdd.redcable.materials.blocks;
 
+import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.ccdd.redcable.RedCable;
 import org.ccdd.redcable.materials.items.Items;
@@ -56,15 +57,15 @@ public abstract class RedCableBlock extends GenericCustomBlock {
 	protected int type;
 	
 	public RedCableBlock(int type) {
-		this(type, 70);
+		this(type, Material.STEP.getId()); // for material visibility
 	}
 	
 	public RedCableBlock(int type, int baseBlock) {
-		super(RedCable.instance, "speakerwireblock_"+String.valueOf(type), baseBlock);
+		super(RedCable.instance, "redcableblock_"+String.valueOf(type), baseBlock);
 		
 		setType(type);
 		
-		this.setName("Speaker Wire Block "+ String.valueOf(type) + " (DO NOT USE)");
+		this.setName("RedCable Block "+ String.valueOf(type) + " (DO NOT USE)");
 		this.setItemDrop(new SpoutItemStack(Items.redCable));
 		this.setHardness(0.1F);
 	}
@@ -85,7 +86,7 @@ public abstract class RedCableBlock extends GenericCustomBlock {
 			return false;
 		}
 		
-		if (face.equals(BlockFace.NORTH)) {
+		else if (face.equals(BlockFace.NORTH)) {
 			if (
 					((RedCableBlock)((SpoutBlock)block.getRelative(BlockFace.NORTH)).getCustomBlock()).getType() == RedCableBlock.SOUTHtoNORTH ||
 					((RedCableBlock)((SpoutBlock)block.getRelative(BlockFace.NORTH)).getCustomBlock()).getType() == RedCableBlock.SOUTHtoEAST ||
@@ -98,7 +99,7 @@ public abstract class RedCableBlock extends GenericCustomBlock {
 			
 		}
 		
-		if (face.equals(BlockFace.EAST)) {
+		else if (face.equals(BlockFace.EAST)) {
 			if (
 					((RedCableBlock)((SpoutBlock)block.getRelative(BlockFace.EAST)).getCustomBlock()).getType() == RedCableBlock.WESTtoEAST ||
 					((RedCableBlock)((SpoutBlock)block.getRelative(BlockFace.EAST)).getCustomBlock()).getType() == RedCableBlock.WESTtoNORTH ||
@@ -111,7 +112,7 @@ public abstract class RedCableBlock extends GenericCustomBlock {
 			
 		} 
 		
-		if (face.equals(BlockFace.SOUTH)) {
+		else if (face.equals(BlockFace.SOUTH)) {
 			if (
 					((RedCableBlock)((SpoutBlock)block.getRelative(BlockFace.SOUTH)).getCustomBlock()).getType() == RedCableBlock.NORTHtoEAST ||
 					((RedCableBlock)((SpoutBlock)block.getRelative(BlockFace.SOUTH)).getCustomBlock()).getType() == RedCableBlock.NORTHtoSOUTH ||
@@ -124,7 +125,7 @@ public abstract class RedCableBlock extends GenericCustomBlock {
 			
 		} 
 		
-		if (face.equals(BlockFace.WEST)) {
+		else if (face.equals(BlockFace.WEST)) {
 			if (
 					((RedCableBlock)((SpoutBlock)block.getRelative(BlockFace.WEST)).getCustomBlock()).getType() == RedCableBlock.EASTtoNORTH ||
 					((RedCableBlock)((SpoutBlock)block.getRelative(BlockFace.WEST)).getCustomBlock()).getType() == RedCableBlock.EASTtoSOUTH ||
@@ -137,7 +138,7 @@ public abstract class RedCableBlock extends GenericCustomBlock {
 			
 		}
 		
-		if (face.equals(BlockFace.UP)) {
+		else if (face.equals(BlockFace.UP)) {
 			if (
 					((RedCableBlock)((SpoutBlock)block.getRelative(BlockFace.UP)).getCustomBlock()).getType() == RedCableBlock.DOWNtoEAST ||
 					((RedCableBlock)((SpoutBlock)block.getRelative(BlockFace.UP)).getCustomBlock()).getType() == RedCableBlock.DOWNtoNORTH ||
@@ -150,7 +151,7 @@ public abstract class RedCableBlock extends GenericCustomBlock {
 			
 		}
 		
-		if (face.equals(BlockFace.DOWN)) {
+		else if (face.equals(BlockFace.DOWN)) {
 			if (
 					((RedCableBlock)((SpoutBlock)block.getRelative(BlockFace.DOWN)).getCustomBlock()).getType() == RedCableBlock.UPtoDOWN ||
 					((RedCableBlock)((SpoutBlock)block.getRelative(BlockFace.DOWN)).getCustomBlock()).getType() == RedCableBlock.UPtoEAST ||

@@ -1,11 +1,13 @@
 package org.ccdd.redcable;
 
+import java.util.HashSet;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.ccdd.redcable.listeners.RedCableListener;
 import org.ccdd.redcable.materials.blocks.Blocks;
+import org.ccdd.redcable.materials.blocks.RedCableBlock;
 import org.ccdd.redcable.materials.items.Items;
 import org.ccdd.redcable.util.Recipies;
 import org.ccdd.redcable.util.ResourceManager;
@@ -48,6 +50,10 @@ public class RedCable extends JavaPlugin {
 		Bukkit.getLogger().log(Level.INFO, "[RedCable] Enabled");
 		
 	}
+
+    public HashSet<RedCableBlock> getBlockSet() {
+        return blocks.getBlockSet();
+    }
 	
 	public void onDisable() {
 		Bukkit.getLogger().log(Level.INFO, "[RedCable] Disabled");
