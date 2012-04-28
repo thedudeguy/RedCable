@@ -18,6 +18,8 @@ import org.ccdd.redcable.materials.blocks.wires.RedCableWestNorth;
 import org.ccdd.redcable.materials.blocks.wires.RedCableWestUp;
 import org.getspout.spoutapi.block.design.Texture;
 
+import java.util.HashSet;
+
 public class Blocks {
 
 	public static final Texture speakerwireTexture = new Texture(RedCable.instance, "speakerwireblock.png", 256, 256, 16);
@@ -41,6 +43,28 @@ public class Blocks {
 	public static RedCableBlock redCableBlockWestDown;
 	public static RedCableBlock redCableBlockNorthDown;
 	public static RedCableBlock redCableBlockSouthDown;
+
+    private HashSet<RedCableBlock> blockSet = new HashSet<RedCableBlock>(){{
+        add(redCableBlockEastDown);
+        add(redCableBlockNorthSouth);
+
+        add(redCableBlockNorthEast);
+        add(redCableBlockEastSouth);
+        add(redCableBlockSouthWest);
+        add(redCableBlockWestNorth);
+
+        add(redCableBlockUpDown);
+
+        add(redCableBlockEastUp);
+        add(redCableBlockWestUp);
+        add(redCableBlockNorthUp);
+        add(redCableBlockSouthUp);
+
+        add(redCableBlockEastDown);
+        add(redCableBlockWestDown);
+        add(redCableBlockNorthDown);
+        add(redCableBlockSouthDown);
+    }};
 	
 	public Blocks() {
 		
@@ -65,4 +89,7 @@ public class Blocks {
 		redCableBlockSouthDown = new RedCableSouthDown();
 		
 	}
+    public HashSet<RedCableBlock> getBlockSet(){
+        return blockSet;
+    }
 }

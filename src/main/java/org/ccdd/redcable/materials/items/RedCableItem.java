@@ -1,6 +1,7 @@
 package org.ccdd.redcable.materials.items;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
@@ -29,7 +30,8 @@ public class RedCableItem extends GenericCustomItem {
 				Bukkit.getServer().getPluginManager().callEvent(event);
 				
 				//remove 1 from hand.
-				//if (!player.getGameMode().equals(GameMode.CREATIVE)) {
+                // Removing from a Creative player makes little sense, hmm?
+				if (!player.getGameMode().equals(GameMode.CREATIVE)) {
 					Debug.debug(player, "Removing item from hand");
 					ItemStack inHand = player.getItemInHand();
 					if (inHand.getAmount()<2) {
@@ -37,7 +39,7 @@ public class RedCableItem extends GenericCustomItem {
 					} else {
 						player.getItemInHand().setAmount(inHand.getAmount()-1);
 					}
-				//}
+				}
 				
 			}
 			

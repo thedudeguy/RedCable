@@ -4,11 +4,17 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.PriorityQueue;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.ccdd.redcable.RedCable;
+
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.ccdd.redcable.events.RedCablePlaceEvent;
 import org.ccdd.redcable.events.RedCablePowerEvent;
@@ -32,7 +38,7 @@ public class RedCableListener implements Listener {
 			SpoutBlock relBlock = (SpoutBlock)block.getRelative(face);
 			
 			if (relBlock.getCustomBlock() != null && relBlock.getCustomBlock() instanceof RedCableBlock) {
-				Debug.debug("Block at ", face, " is speakerwireblock");
+				Debug.debug("Block at ", face, " is redcableblock");
 				
 				if ( ((RedCableBlock)relBlock.getCustomBlock()).hasOpenEnd(relBlock) )
 				{
@@ -244,4 +250,16 @@ public class RedCableListener implements Listener {
 			
 		}
 	}
+
+    @EventHandler(priority= EventPriority.HIGH)
+    public void playerStepsOnWire (PlayerInteractEvent event) {
+        if (event.getAction().equals(Action.PHYSICAL)){ // Steps on it
+            SpoutBlock block = (SpoutBlock) event.getClickedBlock();
+            if (block.getCustomBlock() != null){
+                if (RedCable.instance.getBlockSet().contains(block.getCustomBlock())){
+                    event.setCancelled(true); // We don't want the "step on" event to fire at all for our blocks
+                }
+            }
+        }
+    }
 }
