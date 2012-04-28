@@ -1,1 +1,1 @@
-[Jenkens](http://build.lincomlinux.org/jenkins/job/RedCable/)
+[Jenkins](http://build.lincomlinux.org/jenkins/job/RedCable/)
