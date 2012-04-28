@@ -1,5 +1,8 @@
 package org.ccdd.redcable.materials.blocks.wires;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.block.BlockFace;
 import org.ccdd.redcable.materials.blocks.RedCableBlock;
 import org.ccdd.redcable.materials.blocks.designs.RedCableTurnDesign;
@@ -15,6 +18,8 @@ public class RedCableWestUp extends RedCableBlock {
 	private float moveY = -0.46875F;
 	private float moveZ = 0;
 	
+	private List<BlockFace> wireEnds = Arrays.asList(BlockFace.WEST, BlockFace.UP);
+	
 	public RedCableWestUp() {
 		
 		super(RedCableBlock.WESTtoUP);
@@ -27,6 +32,11 @@ public class RedCableWestUp extends RedCableBlock {
 		if (!this.isFaceConnected(block, BlockFace.WEST)) return true;
 		if (!this.isFaceConnected(block, BlockFace.UP)) return true;
 		return false;
+	}
+
+	@Override
+	public List<BlockFace> getWireEnds() {
+		return wireEnds;
 	}
 
 }

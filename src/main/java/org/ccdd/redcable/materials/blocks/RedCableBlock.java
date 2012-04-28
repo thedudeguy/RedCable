@@ -1,8 +1,13 @@
 package org.ccdd.redcable.materials.blocks;
 
+import java.util.List;
+
+import org.bukkit.Bukkit;
 import org.bukkit.block.BlockFace;
 import org.ccdd.redcable.RedCable;
+import org.ccdd.redcable.events.RedCablePowerEvent;
 import org.ccdd.redcable.materials.items.Items;
+import org.ccdd.redcable.util.Debug;
 import org.getspout.spoutapi.block.SpoutBlock;
 import org.getspout.spoutapi.inventory.SpoutItemStack;
 import org.getspout.spoutapi.material.block.GenericCustomBlock;
@@ -60,11 +65,13 @@ public abstract class RedCableBlock extends GenericCustomBlock {
 	}
 	
 	public RedCableBlock(int type, int baseBlock) {
-		super(RedCable.instance, "speakerwireblock_"+String.valueOf(type), baseBlock);
+		super(RedCable.instance, "redcableblock_"+String.valueOf(type), baseBlock);
+		
+		
 		
 		setType(type);
 		
-		this.setName("Speaker Wire Block "+ String.valueOf(type) + " (DO NOT USE)");
+		this.setName("RedCable Block "+ String.valueOf(type) + " (DO NOT USE)");
 		this.setItemDrop(new SpoutItemStack(Items.redCable));
 		this.setHardness(0.1F);
 	}
@@ -75,6 +82,89 @@ public abstract class RedCableBlock extends GenericCustomBlock {
 	
 	public int getType() {
 		return type;
+	}
+	
+	@Override
+	public boolean isIndirectlyProvidingPowerTo(org.bukkit.World world, int x, int y, int z, org.bukkit.block.BlockFace face) {
+		
+		Debug.debug("isInderectlyProvidingPowerTo || face: ", face);
+		
+		return false;
+	}
+	
+	/**
+	 * Face is the the face of another block which is looking toward this block to request if it has power, I beleive
+	 * so if this wire is a eastsouth wire, the block the the south will ask on its north face, to see if this block has power.
+	 * to know if we have power, we can look toward our east.
+	 */
+	@Override
+	public boolean isProvidingPowerTo(org.bukkit.World world, int x, int y, int z, org.bukkit.block.BlockFace face) {
+		
+		SpoutBlock block = (SpoutBlock)world.getBlockAt(x, y, z);
+		
+		int power = ((RedCableBlock)block.getCustomBlock()).getPower(block);
+		
+		Debug.debug("isProvidingPowerTo || face: ", face, " || block: ", block.getBlockType().getName(), " || Power: ", power);
+		
+		List<BlockFace> wireList = ((RedCableBlock)block.getCustomBlock()).getWireEnds();
+		
+		if (!wireList.contains(face.getOppositeFace())) return false;
+		
+		return false;
+		
+	}
+	
+	@Override
+	public void onNeighborBlockChange(org.bukkit.World world, int x, int y, int z, int changedId) {
+		
+		Debug.debug("onNeighborBlockChange || changeId: ", changedId);
+		
+		int totalPower = 0;
+		SpoutBlock block = (SpoutBlock)world.getBlockAt(x, y, z);
+		
+		//each wire has 2 faces which can receive power, check those 2 faces for receiving power.
+		List<BlockFace> faces = ((RedCableBlock)block.getCustomBlock()).getWireEnds();
+		for (BlockFace face : faces ) {
+			
+			if (
+					((SpoutBlock)block.getRelative(face)).isBlockFacePowered(face.getOppositeFace()) ||
+					((SpoutBlock)block.getRelative(face)).isBlockFaceIndirectlyPowered(face.getOppositeFace())
+					) {
+				
+				Debug.debug("block at face ", face, " has their face ", face.getOppositeFace(), " powered");
+				
+				totalPower += ((SpoutBlock)block.getRelative(face)).getBlockPower(face.getOppositeFace());
+				
+			}
+		}
+		
+		//since we dont need to keep track of how much power is in the block, we will just max it out at 1
+		if (totalPower > 1) totalPower = 1;
+		
+		RedCablePowerEvent event = new RedCablePowerEvent(block, getPower(block), totalPower, null);
+		Bukkit.getServer().getPluginManager().callEvent(event);
+		
+		
+	}
+	
+	/**
+	 * gets the block data determining if it is powered.
+	 * @param block
+	 * @return
+	 */
+	public Integer getPower(SpoutBlock block) {
+		
+		if ( (Integer)block.getData("redcable.power") == null) return 0; 
+		return (Integer)block.getData("redcable.power");
+	}
+	
+	/**
+	 * sets the data for the block if it is powered or not.
+	 * @param block
+	 * @param power
+	 */
+	public void setPower(SpoutBlock block, Integer power) {
+		block.setData("redcable.power", power);
 	}
 	
 	public boolean isFaceConnected(SpoutBlock block, BlockFace face) {
@@ -169,4 +259,5 @@ public abstract class RedCableBlock extends GenericCustomBlock {
 	
 	public abstract boolean hasOpenEnd(SpoutBlock block);
 	
+	public abstract List<BlockFace> getWireEnds();
 }

@@ -18,7 +18,8 @@ public class Debug {
 	public static void debug(Object... debugTexts) {
 		String allText = "";
 		for (Object debugText : debugTexts) {
-			allText = allText + debugText.toString();
+			if (debugText == null) allText = allText + "null";
+			else allText = allText + debugText.toString();
 		}
 		debug(allText);
 	}
@@ -33,7 +34,8 @@ public class Debug {
 	public static void debug(Player player, Object... debugTexts) {
 		String allText = "";
 		for (Object debugText : debugTexts) {
-			allText = allText + debugText.toString();
+			if (debugText == null) allText = allText + "null";
+			else allText = allText + debugText.toString();
 		}
 		debug(player, allText);
 	}
