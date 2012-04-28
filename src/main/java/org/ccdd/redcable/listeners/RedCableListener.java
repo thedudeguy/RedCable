@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,6 +18,8 @@ import org.ccdd.redcable.util.Debug;
 import org.getspout.spoutapi.block.SpoutBlock;
 
 public class RedCableListener implements Listener {
+	
+	private List<BlockFace> faceList = Arrays.asList(BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST, BlockFace.UP, BlockFace.DOWN);
 	
 	public HashMap<BlockFace, SpoutBlock> getAvailableWires(SpoutBlock block) {
 		List<BlockFace> faceList = Arrays.asList(BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST,  BlockFace.UP, BlockFace.DOWN);
@@ -150,17 +153,62 @@ public class RedCableListener implements Listener {
 		
 		Debug.debug("BlockRedstoneEvent || Name: ", block.getBlockType().getName() , "|| Old current: ", event.getOldCurrent(), " || New Current: ", event.getNewCurrent());
 		
+		//if this block is a cable wire and receives a red stone event, its from stepping on it.
+		//if we dont continue on to send the redcablepowerevent, this will have no effect.
+		if (block.getCustomBlock() != null && block.getCustomBlock() instanceof RedCableBlock) return;
+		
+		//see if a redstone cable is attached to this block.
+		for (BlockFace face : faceList ) {
+			if ( 
+					((SpoutBlock)block.getRelative(face)).getCustomBlock() != null &&
+					((SpoutBlock)block.getRelative(face)).getCustomBlock() instanceof RedCableBlock &&
+					((RedCableBlock)((SpoutBlock)block.getRelative(face)).getCustomBlock()).getWireEnds().contains(face.getOppositeFace())
+					) {
+				
+				Debug.debug("This Block has a cable block attached");
+				SpoutBlock relblock = (SpoutBlock)block.getRelative(face);
+				int oldpower = ((RedCableBlock)relblock.getCustomBlock()).getPower(relblock);
+				int powerchange = event.getNewCurrent() - event.getOldCurrent();
+				int newpower = (oldpower + powerchange);
+				if (newpower < 0) newpower = 0;
+				RedCablePowerEvent revent = new RedCablePowerEvent(relblock, oldpower, newpower);
+				Bukkit.getServer().getPluginManager().callEvent(revent);
+			}
+		}
+		
 	}
 	
 	@EventHandler
 	public void onRedCablePower(RedCablePowerEvent event) {
 		
-		RedCableBlock cableBlock = (RedCableBlock)event.getBlock().getCustomBlock();
+		SpoutBlock block = (SpoutBlock)event.getBlock();
+		RedCableBlock cableBlock = (RedCableBlock)block.getCustomBlock();
 		
-		Debug.debug("RedCablePowerEvent || oldCurrent: ", event.getOldCurrent(), " || newCurrent: ", event.getNewCurrent(), " || faceComingFrom: ", event.getFaceComingFrom());
+		Debug.debug("RedCablePowerEvent || oldCurrent: ", event.getOldCurrent(), " || newCurrent: ", event.getNewCurrent());
 		
-		//set this blocks power to 1.
 		cableBlock.setPower(event.getBlock(), event.getNewCurrent());
+		
+		//see if a redstone cable is attached to this block.
+		for (BlockFace face : faceList ) {
+			if (
+					(block.getRelative(face)).getCustomBlock() != null &&
+					(block.getRelative(face)).getCustomBlock() instanceof RedCableBlock &&
+					((RedCableBlock)(block.getRelative(face)).getCustomBlock()).getWireEnds().contains(face.getOppositeFace())
+					) {
+				Debug.debug("This Block has a cable block attached");
+				SpoutBlock relblock = (SpoutBlock)block.getRelative(face);
+				//int oldpower = ((RedCableBlock)relblock.getCustomBlock()).getPower(relblock);
+				//int powerchange = event.getNewCurrent() - event.getOldCurrent();
+				//int newpower = (oldpower + powerchange);
+				//if (newpower < 0) newpower = 0;
+				
+				//prevents infinite loop
+				if (cableBlock.getPower(relblock) != event.getNewCurrent()) {
+					RedCablePowerEvent revent = new RedCablePowerEvent(relblock, event.getOldCurrent(), event.getNewCurrent());
+					Bukkit.getServer().getPluginManager().callEvent(revent);
+				}
+			}
+		}
 	
 	}
 	

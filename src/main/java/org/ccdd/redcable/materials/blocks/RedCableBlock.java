@@ -2,10 +2,8 @@ package org.ccdd.redcable.materials.blocks;
 
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.block.BlockFace;
 import org.ccdd.redcable.RedCable;
-import org.ccdd.redcable.events.RedCablePowerEvent;
 import org.ccdd.redcable.materials.items.Items;
 import org.ccdd.redcable.util.Debug;
 import org.getspout.spoutapi.block.SpoutBlock;
@@ -110,6 +108,7 @@ public abstract class RedCableBlock extends GenericCustomBlock {
 		
 		if (!wireList.contains(face.getOppositeFace())) return false;
 		
+		if (power > 0) return true;
 		return false;
 		
 	}
@@ -119,6 +118,7 @@ public abstract class RedCableBlock extends GenericCustomBlock {
 		
 		Debug.debug("onNeighborBlockChange || changeId: ", changedId);
 		
+		/*
 		int totalPower = 0;
 		SpoutBlock block = (SpoutBlock)world.getBlockAt(x, y, z);
 		
@@ -126,14 +126,16 @@ public abstract class RedCableBlock extends GenericCustomBlock {
 		List<BlockFace> faces = ((RedCableBlock)block.getCustomBlock()).getWireEnds();
 		for (BlockFace face : faces ) {
 			
+			Debug.debug("onNeighborBlockChange continued || face: ", face);
+			
 			if (
-					((SpoutBlock)block.getRelative(face)).isBlockFacePowered(face.getOppositeFace()) ||
-					((SpoutBlock)block.getRelative(face)).isBlockFaceIndirectlyPowered(face.getOppositeFace())
+					block.isBlockFacePowered(face) ||
+					block.isBlockFaceIndirectlyPowered(face)
 					) {
 				
-				Debug.debug("block at face ", face, " has their face ", face.getOppositeFace(), " powered");
+				Debug.debug("blockface ", face, " is  powered");
 				
-				totalPower += ((SpoutBlock)block.getRelative(face)).getBlockPower(face.getOppositeFace());
+				totalPower += ((SpoutBlock)block).getBlockPower();
 				
 			}
 		}
@@ -143,7 +145,7 @@ public abstract class RedCableBlock extends GenericCustomBlock {
 		
 		RedCablePowerEvent event = new RedCablePowerEvent(block, getPower(block), totalPower, null);
 		Bukkit.getServer().getPluginManager().callEvent(event);
-		
+		*/
 		
 	}
 	
