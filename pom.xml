@@ -4,7 +4,7 @@
 	<groupId>org.ccdd</groupId>
 	<artifactId>redcable</artifactId>
 	<version>dev</version>
-	<name>XP in the Jar</name>
+	<name>RedCable</name>
 	<repositories>
 		<repository>
 			<id>bukkit-repo</id>
