@@ -107,7 +107,10 @@ public abstract class RedCableBlock extends GenericCustomBlock {
 		
 		if (!wireList.contains(face.getOppositeFace())) return false;
 		
-		if (power > 0) return true;
+		if( ( ((RedCableBlock)block.getCustomBlock()).getFacePower(block, face.getOppositeFace()) > 0) ) {
+			return true;
+		}
+		
 		return false;
 		
 	}
@@ -152,6 +155,7 @@ public abstract class RedCableBlock extends GenericCustomBlock {
 	 * gets the block data determining if it is powered.
 	 * @param block
 	 * @return
+	 * @deprecated
 	 */
 	public Integer getPower(SpoutBlock block) {
 		
@@ -163,9 +167,63 @@ public abstract class RedCableBlock extends GenericCustomBlock {
 	 * sets the data for the block if it is powered or not.
 	 * @param block
 	 * @param power
+	 * @deprecated
 	 */
 	public void setPower(SpoutBlock block, Integer power) {
 		block.setData("redcable.power", power);
+	}
+	
+	/**
+	 * Gets all the power levels of the faces and adds them up.
+	 * a power level of 2 or more means the wire is receiving power from both sides
+	 * @param block
+	 * @return
+	 */
+	public int getTotalPower(SpoutBlock block) {
+		int north = getFacePower(block, BlockFace.NORTH);
+		int south = getFacePower(block, BlockFace.SOUTH);
+		int east = getFacePower(block, BlockFace.EAST);
+		int west = getFacePower(block, BlockFace.WEST);
+		int up = getFacePower(block, BlockFace.UP);
+		int down = getFacePower(block, BlockFace.DOWN);
+		
+		return north+south+east+west+up+down;
+	}
+	
+	/**
+	 * Get the power that is being received to a face. 0 means none.
+	 * 1 should be powered
+	 * @param block
+	 * @param face
+	 * @return
+	 */
+	public int getFacePower(SpoutBlock block, BlockFace face) {
+		if ( (Integer)block.getData("redcable.power."+face.toString()) == null) return 0; 
+		return (Integer)block.getData("redcable.power."+face.toString());
+	}
+	
+	/**
+	 * Sets the power that is being received from a face.
+	 * set to 0 for not receivng power, set to 1 for is receiving
+	 * @param block
+	 * @param face
+	 * @param power
+	 */
+	public void setFacePower(SpoutBlock block, BlockFace face, Integer power) {
+		block.setData("redcable.power."+face.toString(), power);
+	}
+	
+	/**
+	 * Resets all the power settings for each face.
+	 * @param block
+	 */
+	public void resetPower(SpoutBlock block) {
+		block.setData("redcable.power.NORTH", 0);
+		block.setData("redcable.power.EAST", 0);
+		block.setData("redcable.power.SOUTH", 0);
+		block.setData("redcable.power.WEST", 0);
+		block.setData("redcable.power.UP", 0);
+		block.setData("redcable.power.DOWN", 0);
 	}
 	
 	public boolean isFaceConnected(SpoutBlock block, BlockFace face) {

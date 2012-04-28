@@ -1,5 +1,6 @@
 package org.ccdd.redcable.events;
 
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.getspout.spoutapi.block.SpoutBlock;
@@ -9,21 +10,25 @@ public class RedCablePowerEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	
 	private SpoutBlock block;
-	private int oldCurrent;
-	private int newCurrent;
+	private BlockFace face;
+	private int newPower;
 	
-	public RedCablePowerEvent(SpoutBlock block, int oldCurrent, int newCurrent) {
-		this.oldCurrent = oldCurrent;
-		this.newCurrent = newCurrent;
+	public RedCablePowerEvent(SpoutBlock block, BlockFace face, int newPower) {
+		this.newPower = newPower;
 		this.block = block;
+		this.face = face;
 	}
 	
-	public int getOldCurrent() {
-		return oldCurrent;
+	public int getNewPower() {
+		return newPower;
 	}
 	
-	public int getNewCurrent() {
-		return newCurrent;
+	public BlockFace getFaceComingFrom() {
+		return face.getOppositeFace();
+	}
+	
+	public BlockFace getFace() {
+		return face;
 	}
 	
 	public HandlerList getHandlers() {

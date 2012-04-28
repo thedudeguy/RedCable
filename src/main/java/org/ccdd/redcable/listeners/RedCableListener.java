@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.PriorityQueue;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockFace;
@@ -12,10 +11,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.ccdd.redcable.RedCable;
-
-import org.bukkit.event.block.BlockRedstoneEvent;
 import org.ccdd.redcable.events.RedCablePlaceEvent;
 import org.ccdd.redcable.events.RedCablePowerEvent;
 import org.ccdd.redcable.materials.blocks.Blocks;
@@ -173,11 +171,9 @@ public class RedCableListener implements Listener {
 				
 				Debug.debug("This Block has a cable block attached");
 				SpoutBlock relblock = (SpoutBlock)block.getRelative(face);
-				int oldpower = ((RedCableBlock)relblock.getCustomBlock()).getPower(relblock);
-				int powerchange = event.getNewCurrent() - event.getOldCurrent();
-				int newpower = (oldpower + powerchange);
-				if (newpower < 0) newpower = 0;
-				RedCablePowerEvent revent = new RedCablePowerEvent(relblock, oldpower, newpower);
+				int power = 0;
+				if (event.getNewCurrent() > 0) power = 1;
+				RedCablePowerEvent revent = new RedCablePowerEvent(relblock, face, power);
 				Bukkit.getServer().getPluginManager().callEvent(revent);
 			}
 		}
@@ -190,32 +186,36 @@ public class RedCableListener implements Listener {
 		SpoutBlock block = (SpoutBlock)event.getBlock();
 		RedCableBlock cableBlock = (RedCableBlock)block.getCustomBlock();
 		
-		Debug.debug("RedCablePowerEvent || oldCurrent: ", event.getOldCurrent(), " || newCurrent: ", event.getNewCurrent());
+		Debug.debug("RedCablePowerEvent || newPower: ", event.getNewPower(), " || face: ", event.getFace(), " || faceComingFrom: ", event.getFaceComingFrom());
 		
-		cableBlock.setPower(event.getBlock(), event.getNewCurrent());
-		
-		//see if a redstone cable is attached to this block.
-		for (BlockFace face : faceList ) {
-			if (
-					(block.getRelative(face)).getCustomBlock() != null &&
-					(block.getRelative(face)).getCustomBlock() instanceof RedCableBlock &&
-					((RedCableBlock)(block.getRelative(face)).getCustomBlock()).getWireEnds().contains(face.getOppositeFace())
-					) {
-				Debug.debug("This Block has a cable block attached");
-				SpoutBlock relblock = (SpoutBlock)block.getRelative(face);
-				//int oldpower = ((RedCableBlock)relblock.getCustomBlock()).getPower(relblock);
-				//int powerchange = event.getNewCurrent() - event.getOldCurrent();
-				//int newpower = (oldpower + powerchange);
-				//if (newpower < 0) newpower = 0;
+		List<BlockFace> wireFaces = cableBlock.getWireEnds();
+		for ( BlockFace wireFace : wireFaces ) {
+			//if its the face where the power is coming from, we should NOT return the power.
+			//only set power to the face other than the face where the power is coming from.
+			if (!wireFace.equals(event.getFaceComingFrom())) {
+				cableBlock.setFacePower(block, wireFace, event.getNewPower());
 				
-				//prevents infinite loop
-				if (cableBlock.getPower(relblock) != event.getNewCurrent()) {
-					RedCablePowerEvent revent = new RedCablePowerEvent(relblock, event.getOldCurrent(), event.getNewCurrent());
+				//notify a wireblock if it is connected to this face.
+				if (
+						(block.getRelative(wireFace)).getCustomBlock() != null &&
+						(block.getRelative(wireFace)).getCustomBlock() instanceof RedCableBlock &&
+						((RedCableBlock)(block.getRelative(wireFace)).getCustomBlock()).getWireEnds().contains(wireFace.getOppositeFace())
+						) {
+					Debug.debug("This Block has a cable block attached");
+					SpoutBlock relblock = (SpoutBlock)block.getRelative(wireFace);
+					RedCablePowerEvent revent = new RedCablePowerEvent(relblock, wireFace, event.getNewPower());
 					Bukkit.getServer().getPluginManager().callEvent(revent);
 				}
 			}
 		}
-	
+		
+		//if the power of this block is more than 1, the wire has been overloaded.
+		if (cableBlock.getTotalPower(block) > 1) {
+			Debug.debug("Wire Overload!");
+			block.breakNaturally();
+			return;
+		}
+
 	}
 	
 	@EventHandler
