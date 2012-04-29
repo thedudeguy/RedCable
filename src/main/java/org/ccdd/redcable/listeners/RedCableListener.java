@@ -6,13 +6,16 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.util.Vector;
 import org.ccdd.redcable.RedCable;
 import org.ccdd.redcable.events.RedCablePlaceEvent;
 import org.ccdd.redcable.events.RedCablePowerEvent;
@@ -20,6 +23,9 @@ import org.ccdd.redcable.materials.blocks.Blocks;
 import org.ccdd.redcable.materials.blocks.RedCableBlock;
 import org.ccdd.redcable.util.Debug;
 import org.getspout.spoutapi.block.SpoutBlock;
+import org.getspout.spoutapi.material.CustomBlock;
+import org.getspout.spoutapi.particle.Particle;
+import org.getspout.spoutapi.particle.Particle.ParticleType;
 
 public class RedCableListener implements Listener {
 	
@@ -195,6 +201,15 @@ public class RedCableListener implements Listener {
 			if (!wireFace.equals(event.getFaceComingFrom())) {
 				cableBlock.setFacePower(block, wireFace, event.getNewPower());
 				
+				Vector motion = new Vector();
+				motion.setX(0);
+				motion.setY(0);
+				motion.setZ(0);
+				Particle electrify = new Particle(ParticleType.SPLASH, event.getBlock().getLocation(), motion);
+				electrify.setGravity(0.1F);
+				electrify.setAmount(100);
+				electrify.spawn();
+				
 				//notify a wireblock if it is connected to this face.
 				if (
 						(block.getRelative(wireFace)).getCustomBlock() != null &&
@@ -205,8 +220,20 @@ public class RedCableListener implements Listener {
 					SpoutBlock relblock = (SpoutBlock)block.getRelative(wireFace);
 					RedCablePowerEvent revent = new RedCablePowerEvent(relblock, wireFace, event.getNewPower());
 					Bukkit.getServer().getPluginManager().callEvent(revent);
+					
+				} else if (block.getRelative(wireFace) != null) {
+					
+					SpoutBlock ublock = block.getRelative(wireFace);
+					if (ublock.getCustomBlock() != null && ublock.getCustomBlock() instanceof RedCableBlock) {
+						//er... do nothing
+					} else {
+						//try to apply physics to the block if its anything other than a wire
+						net.minecraft.server.World w = ((net.minecraft.server.World)((CraftWorld)ublock.getWorld()).getHandle());
+						w.applyPhysics(ublock.getX(), ublock.getY(), ublock.getZ(), ublock.getTypeId());
+					}
+					
 				}
-			}
+			} 
 		}
 		
 		//if the power of this block is more than 1, the wire has been overloaded.
@@ -232,6 +259,15 @@ public class RedCableListener implements Listener {
 		
 		setBlockType((SpoutBlock)event.getBlock(), wires);
 		
+		Vector motion = new Vector();
+		motion.setX(0);
+		motion.setY(0);
+		motion.setZ(0);
+		Particle electrify = new Particle(ParticleType.SPLASH, event.getBlock().getLocation(), motion);
+		electrify.setGravity(0.1F);
+		electrify.setAmount(100);
+		electrify.spawn();
+		
 		//do the same for the wipres we connected to.
 		//we know that every wire in this list has ATLEAST one available connection
 		for ( Entry<BlockFace, SpoutBlock> item : wires.entrySet() ) {
@@ -247,7 +283,6 @@ public class RedCableListener implements Listener {
 			}
 			
 			setBlockType(item.getValue(), connectTo);
-			
 		}
 	}
 

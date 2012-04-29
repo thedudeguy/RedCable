@@ -1,5 +1,7 @@
 package org.ccdd.redcable.materials.blocks;
 
+import java.util.HashSet;
+
 import org.ccdd.redcable.RedCable;
 import org.ccdd.redcable.materials.blocks.wires.RedCableEastDown;
 import org.ccdd.redcable.materials.blocks.wires.RedCableEastSouth;
@@ -17,8 +19,6 @@ import org.ccdd.redcable.materials.blocks.wires.RedCableWestDown;
 import org.ccdd.redcable.materials.blocks.wires.RedCableWestNorth;
 import org.ccdd.redcable.materials.blocks.wires.RedCableWestUp;
 import org.getspout.spoutapi.block.design.Texture;
-
-import java.util.HashSet;
 
 public class Blocks {
 
@@ -43,7 +43,7 @@ public class Blocks {
 	public static RedCableBlock redCableBlockWestDown;
 	public static RedCableBlock redCableBlockNorthDown;
 	public static RedCableBlock redCableBlockSouthDown;
-
+	
     private HashSet<RedCableBlock> blockSet = new HashSet<RedCableBlock>(){{
         add(redCableBlockEastDown);
         add(redCableBlockNorthSouth);
